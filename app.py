@@ -117,7 +117,7 @@ t1, t2, t3, t4 = st.tabs(["🦺 Safety & PPE Audit", "🧱 Crack Diagnostics",
 # ---- Tab 1
 with t1:
     st.subheader("Site Safety & PPE Audit")
-    up = st.file_uploader("Upload a construction site photo", type=["jpg", "jpeg", "png"], key="safety")
+    up = st.file_uploader("Upload a construction site photo", type=["jpg", "jpeg", "png"], key="safety_upload")
     desc = st.text_area("Optional site description", key="safety_desc")
     if up and st.button("Run safety audit", type="primary"):
         img = load_image(up)
@@ -131,8 +131,8 @@ with t1:
             )
             with st.spinner("Analysing..."):
                 res = analyse(prompt, img, DEMO_SAFETY)
-            st.session_state["safety"] = res
-    res = st.session_state.get("safety")
+            st.session_state["safety_res"] = res
+    res = st.session_state.get("safety_res")
     if res:
         c1, c2 = st.columns(2)
         c1.markdown(f'<div class="metric-card"><h2>{res.get("safety_score", "-")}/100</h2>Safety Score</div>',
@@ -152,7 +152,7 @@ with t1:
 # ---- Tab 2
 with t2:
     st.subheader("Crack Diagnostics & Structural Integrity")
-    up = st.file_uploader("Upload a concrete / wall surface photo", type=["jpg", "jpeg", "png"], key="crack")
+    up = st.file_uploader("Upload a concrete / wall surface photo", type=["jpg", "jpeg", "png"], key="crack_upload")
     if up and st.button("Diagnose crack", type="primary"):
         img = load_image(up)
         if img:
@@ -164,8 +164,8 @@ with t2:
                 "recommended_repairs [list, e.g. epoxy injection, structural re-grouting]."
             )
             with st.spinner("Analysing..."):
-                st.session_state["crack"] = analyse(prompt, img, DEMO_CRACK)
-    r = st.session_state.get("crack")
+                st.session_state["crack_res"] = analyse(prompt, img, DEMO_CRACK)
+    r = st.session_state.get("crack_res")
     if r:
         a, b, c = st.columns(3)
         a.metric("Defect type", r.get("defect_type"))
